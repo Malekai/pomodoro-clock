@@ -1,6 +1,3 @@
-//notes for what's needed
-//--need to make sure that when user hits 0; clicker turns off.
-
 //set variables that change for session
   var sessionNum = $("#sessionNum");
   var fullTime = sessionNum.html();
@@ -20,7 +17,7 @@
   $('#minusSession').click(function(event){
     event.stopPropagation();
     //bring down start time
-    if (timeDigits > 0) {
+    if (timeDigits > 1) {
       timeDigits--;
       sessionNum.html(String(timeDigits) + ":" + "00");
     }
@@ -34,7 +31,7 @@
 
   $('#minusBreak').click(function(){
     //bring down start time
-    if (digits > 0) {
+    if (digits > 1) {
       digits--;
       breakNum.html(String(digits) + ":" + "00");
     }
@@ -59,6 +56,8 @@ function timer() {
   var myTime = sessionNum.html();
   //check if clock has hit 00:00 and then turn into break
   if (myTime == "00:00") {
+    var audio = new Audio('Beeper.mp3');
+    audio.play();
     $('.circle').toggleClass('start');
     $('#sessionNum').toggleClass("onBreak");
     $('h2').toggleClass("orange");

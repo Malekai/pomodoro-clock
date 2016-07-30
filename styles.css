@@ -55,6 +55,10 @@ a {
 	text-decoration: none;
 }
 
+p {
+	margin-top: 20px;
+}
+
 .orange {
 	color: orange;
 }
