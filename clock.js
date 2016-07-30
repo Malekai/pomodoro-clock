@@ -1,38 +1,45 @@
 //notes for what's needed
-//--need to add break stuff including increasing and decreasing it
+//--need to make sure that when user hits 0; clicker turns off.
 
 //set variables that change for session
-var sessionNum = $("#sessionNum");
-var breakNum = $("#breakNum");
+  var sessionNum = $("#sessionNum");
+  var fullTime = sessionNum.html();
+  var timeDigits = Number(fullTime[0] + fullTime[1])
+  var breakNum = $("#breakNum");
+  var breakTime = breakNum.html();
+  var digits = Number(breakTime[0]);
 
-var fullTime = sessionNum.html();
-var timeDigits = Number(fullTime[0] + fullTime[1])
+//make + and - buttons adjust the variable up and down
+  $('#plusSession').click(function(event){
+    event.stopPropagation();
+    //bring up the start time
+    timeDigits++;
+    sessionNum.html(String(timeDigits) + ":" + "00");
+  });
 
-var breakTime = breakNum.html();
+  $('#minusSession').click(function(event){
+    event.stopPropagation();
+    //bring down start time
+    if (timeDigits > 0) {
+      timeDigits--;
+      sessionNum.html(String(timeDigits) + ":" + "00");
+    }
+  });
 
-//when timer hits 0:00, turn orange for a second and then go to break mode
-//--how do I check if timer has gone to 0?
-//if (fullTime = "0:00")) {
-  //display breakNum where sessionNum is
-  //$('#sessionNum').html(breakTime);
-//}
+  $('#plusBreak').click(function(){
+    //bring up the start time
+    digits++;
+    breakNum.html(String(digits) + ":" + "00");
+  });
 
-//if timer has changed 4 times go into bigger break mode
+  $('#minusBreak').click(function(){
+    //bring down start time
+    if (digits > 0) {
+      digits--;
+      breakNum.html(String(digits) + ":" + "00");
+    }
+  });
 
-//make + and - buttons adjust the variable up and down and stop propogation
-$('#plusSession').click(function(event){
-  event.stopPropagation();
-  //bring up the start time
-  timeDigits++;
-  sessionNum.html(String(timeDigits) + ":" + "00");
-});
-
-$('#minusSession').click(function(event){
-  event.stopPropagation();
-  //bring down start time
-  timeDigits--;
-  sessionNum.html(String(timeDigits) + ":" + "00");
-});
 
 //make timer countdown on and off when clicked
 $('.circle').click(function(){
@@ -46,9 +53,29 @@ $('.circle').click(function(){
 
 //initiate timer and save to variable so we can pause and resume
 var t = 0;
+var timeStore
 //function to initiate timer
 function timer() {
   var myTime = sessionNum.html();
+  //check if clock has hit 00:00 and then turn into break
+  if (myTime == "00:00") {
+    $('.circle').toggleClass('start');
+    $('#sessionNum').toggleClass("onBreak");
+    $('h2').toggleClass("orange");
+    $('#sessionNum').toggleClass("orange");
+    if ($('#sessionNum').hasClass("onBreak")) {
+      $('#sessionNum').html(String(digits) + ":" + "00");
+      $('h2').text("Break Time!");
+      return;
+    } //make timer go back to session time
+    else if(!$('#sessionNum').hasClass("onBreak")) {
+      timeDigits = Number(fullTime[0] + fullTime[1])
+      $('#sessionNum').html(String(timeDigits) + ":" + "00");
+      $('h2').text("Session");
+      return;
+    }
+  }
+
   //split time so we can put into date through individual numbers
   var ss = myTime.split(":");
   var dt = new Date();
@@ -65,7 +92,7 @@ function timer() {
 
   sessionNum.html(ts[1]+":"+ts[2]);
   t = setTimeout(timer, 1000);
-  console.log(ts);
+
 }
 
 //function to pause timer
