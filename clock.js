@@ -10,8 +10,10 @@
   $('#plusSession').click(function(event){
     event.stopPropagation();
     //bring up the start time
-    timeDigits++;
-    sessionNum.html(String(timeDigits) + ":" + "00");
+    if (timeDigits < 60) {
+      timeDigits++;
+      sessionNum.html(String(timeDigits) + ":" + "00");
+    }
   });
 
   $('#minusSession').click(function(event){
@@ -25,8 +27,10 @@
 
   $('#plusBreak').click(function(){
     //bring up the start time
-    digits++;
-    breakNum.html(String(digits) + ":" + "00");
+    if (digits < 60) {
+      digits++;
+      breakNum.html(String(digits) + ":" + "00");
+    }
   });
 
   $('#minusBreak').click(function(){
